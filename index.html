@@ -20,6 +20,18 @@
             pointer-events: none;
             transform: translate(-50%, -50%);
         }
+
+        .secret-code {
+            position: absolute;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            color: #00ff00; /* Яркий зеленый */
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px #00ff00;
+            animation: fadeScale 2s ease-out forwards;
+        }
         
         /* Простые геометрические формы */
         .hexagon {
@@ -158,10 +170,29 @@
         ];
         
         document.addEventListener('click', function(e) {
-            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            createEffect(e.clientX, e.clientY, randomEffect, randomColor);
+            // С вероятностью 0.5% (0.005) показываем секретный код
+            if (Math.random() < 0.005) {
+                createSecretCode(e.clientX, e.clientY);
+            } else {
+                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                createEffect(e.clientX, e.clientY, randomEffect, randomColor);
+            }
         });
+
+        function createSecretCode(x, y) {
+            const codeEl = document.createElement('div');
+            codeEl.className = 'secret-code';
+            codeEl.textContent = 'SECRETCODE2025';
+            codeEl.style.left = `${x}px`;
+            codeEl.style.top = `${y}px`;
+            document.body.appendChild(codeEl);
+            
+            // Удаляем элемент после завершения анимации
+            setTimeout(() => {
+                codeEl.remove();
+            }, 2000);
+        }
         
         function createEffect(x, y, effectType, color) {
             const effect = document.createElement('div');
